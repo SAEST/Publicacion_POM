@@ -14,7 +14,7 @@ pipeline {
             steps {
                 deleteDir()
                 //Clonar el repositorio Git
-                git url: 'https://github.com//SAEST/Publicacion_POM.git', branch: 'main'
+                git url: 'https://github.com/SAEST/Publicacion_POM.git', branch: 'main'
             }
         }
         stage('Install & Setup venv') {
