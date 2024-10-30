@@ -8,8 +8,8 @@ pipeline {
         APP_VERSION = '1.0.0'
         PLATFORM = 'Ubuntu-Windows 2404.1.66.0'
         BROWSER = 'Chromedriver: 130.0.6723.69'
-        BUILD_RESULT = 'currentBuild.currentResult'
-        BUILD_DURATION = 'currentBuild.durationString.replace('and counting', '').trim()'
+        BUILD_RESULT = "currentBuild.currentResult"
+        BUILD_DURATION = "currentBuild.durationString.replace('and counting', '').trim()"
     }
     stages {
         stage('Clean Up and Checkout ') {
