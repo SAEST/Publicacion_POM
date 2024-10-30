@@ -68,7 +68,8 @@ pipeline {
                     . ${VENV_DIR}/bin/activate > /dev/null 2>&1
                     cd utils
                     python3 send_email.py
-            """
+                """
+                }
             }
         }
     }
