@@ -8,8 +8,6 @@ pipeline {
         APP_VERSION = '1.0.0'
         PLATFORM = 'Ubuntu-Windows 2404.1.66.0'
         BROWSER = 'Chromedriver: 130.0.6723.69'
-        BUILD_RESULT = "currentBuild.currentResult"
-        BUILD_DURATION = "currentBuild.durationString.replace('and counting', '').trim()"
     }
     stages {
         stage('Clean Up and Checkout ') {
@@ -63,17 +61,17 @@ pipeline {
                 }
             }
         }
-        stage('Enviar correo') {
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                sh """
-                    . ${VENV_DIR}/bin/activate > /dev/null 2>&1
-                    cd utils
-                    python3 send_email.py
-                """
-                }
-            }
-        }
+        // stage('Enviar correo') {
+        //     steps {
+        //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+        //         sh """
+        //             . ${VENV_DIR}/bin/activate > /dev/null 2>&1
+        //             cd utils
+        //             python3 send_email.py
+        //         """
+        //         }
+        //     }
+        // }
     }
     post {
         always {
@@ -84,6 +82,9 @@ pipeline {
                 // Define las URLs de los reportes
                 def allureReportUrl = "${env.BUILD_URL}allure"
                 def reportpy = "${env.BUILD_URL}execution/node/3/ws/tests/pytestreport/report.html"
+
+                env.BUILD_RESULT = currentBuild.currentResult
+                env.BUILD_DURATION = currentBuild.durationString.replace('and counting', '').trim()
                 
                 // Imprime las URLs en consola
                 echo "El reporte de Allure está disponible en: ${allureReportUrl}"
@@ -92,6 +93,14 @@ pipeline {
                 // Archiva los reportes de Pytest y datos adicionales
                 archiveArtifacts artifacts: 'tests/pytestreport/report.html', allowEmptyArchive: true
                 archiveArtifacts artifacts: 'tests/data/PRES_2024.csv', allowEmptyArchive: true
+            }
+            // Llamar al script de Python que envía el correo
+            steps {
+                sh """
+                     . ${VENV_DIR}/bin/activate > /dev/null 2>&1
+                     cd utils
+                     python3 send_email.py
+                """
             }
         }
     }
