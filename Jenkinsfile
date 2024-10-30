@@ -61,17 +61,17 @@ pipeline {
                 }
             }
         }
-        // stage('Enviar correo') {
-        //     steps {
-        //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-        //         sh """
-        //             . ${VENV_DIR}/bin/activate > /dev/null 2>&1
-        //             cd utils
-        //             python3 send_email.py
-        //         """
-        //         }
-        //     }
-        // }
+        stage('Enviar correo') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                sh """
+                    . ${VENV_DIR}/bin/activate > /dev/null 2>&1
+                    cd utils
+                    python3 send_email.py
+                """
+                }
+            }
+        }
     }
     post {
         always {
@@ -85,7 +85,9 @@ pipeline {
 
                 env.BUILD_RESULT = currentBuild.currentResult
                 env.BUILD_DURATION = currentBuild.durationString.replace('and counting', '').trim()
-                
+                echo "${BUILD_RESULT}"
+                echo "${BUILD_DURATION}"
+
                 // Imprime las URLs en consola
                 echo "El reporte de Allure está disponible en: ${allureReportUrl}"
                 echo "El reporte de Pytest está disponible en: ${reportpy}"
@@ -93,14 +95,6 @@ pipeline {
                 // Archiva los reportes de Pytest y datos adicionales
                 archiveArtifacts artifacts: 'tests/pytestreport/report.html', allowEmptyArchive: true
                 archiveArtifacts artifacts: 'tests/data/PRES_2024.csv', allowEmptyArchive: true
-            }
-            // Llamar al script de Python que envía el correo
-            steps {
-                sh """
-                     . ${VENV_DIR}/bin/activate > /dev/null 2>&1
-                     cd utils
-                     python3 send_email.py
-                """
             }
         }
     }
