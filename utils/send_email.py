@@ -17,10 +17,12 @@ def enviar_correo():
     # Cuerpo del mensaje en HTML
     allure_report_url = f"{os.getenv('BUILD_URL')}allure"
     pytest_report_url = f"{os.getenv('BUILD_URL')}execution/node/3/ws/tests/pytestreport/report.html"
+    blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{os.getenv('JOB_NAME')}/detail/{os.getenv('JOB_NAME')}/#{os.getenv('BUILD_NUMBER')}/pipeline"
     
     body = f"""
-    <p>El pipeline ha finalizado con el estado: {os.getenv('BUILD_STATUS', 'Desconocido')}</p>
-    <p>Revisa los detalles en: <a href="{os.getenv('BUILD_URL')}">{os.getenv('BUILD_URL')}</a></p>
+    <p>El pipeline ha finalizado con el estado: {os.getenv('currentBuild.currentResult', 'Desconocido')}</p>
+    <p>Revisa los detalles en Jenkins: <a href="{os.getenv('BUILD_URL')}">{os.getenv('BUILD_URL')}</a></p>
+    <p>Revisa los detalles en Open Blue Ocean: <a href="{blue_ocean_url}">{blue_ocean_url}</a></p>
     <p>Reporte Allure: <a href="{allure_report_url}">{allure_report_url}</a></p>
     <p>Reporte Pytest: <a href="{pytest_report_url}">{pytest_report_url}</a></p>
     """
