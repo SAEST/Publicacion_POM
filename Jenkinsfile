@@ -73,11 +73,18 @@ pipeline {
                 def reportpy = "${env.BUILD_URL}execution/node/3/ws/tests/pytestreport/report.html"
 
                 env.BUILD_RESULT = currentBuild.currentResult
-                env.BUILD_DURATION = currentBuild.durationString.replace('and counting', '').trim()
+                // Convertir la duración a un formato legible
+                def durationMillis = currentBuild.duration
+                def durationSeconds = (durationMillis / 1000) as int
+                def minutes = (durationSeconds / 60) as int
+                def seconds = durationSeconds % 60
+                env.BUILD_DURATION = "${minutes}m ${seconds}s"
 
                 // Imprime las URLs en consola
                 echo "El reporte de Allure está disponible en: ${allureReportUrl}"
                 echo "El reporte de Pytest está disponible en: ${reportpy}"
+                echo "Resultado del build: ${env.BUILD_RESULT}"
+                echo "Duración del build: ${env.BUILD_DURATION}"
                 
                 // Archiva los reportes de Pytest y datos adicionales
                 archiveArtifacts artifacts: 'tests/pytestreport/report.html', allowEmptyArchive: true
