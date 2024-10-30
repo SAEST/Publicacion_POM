@@ -1,4 +1,5 @@
 import os
+import sys
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -12,8 +13,8 @@ def enviar_correo():
 
     # Información del build de Jenkins
     build_name = os.getenv('JOB_NAME', 'Desconocido')
-    build_number = os.getenv('BUILD_NUMBER', 'Desconocido')
-    build_result = os.getenv('BUILD_RESULT', 'Desconocido')  # Ajusta la variable si la tienes configurada
+    build_result = sys.argv[1] if len(sys.argv) > 1 else 'Desconocido'
+    build_duration = sys.argv[2] if len(sys.argv) > 2 else 'Desconocido'
     build_duration = os.getenv('BUILD_DURATION', 'Desconocido')
     build_url = os.getenv('BUILD_URL', 'Desconocido')
     allure_report_url = f"{build_url}allure"
