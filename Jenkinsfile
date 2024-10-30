@@ -6,8 +6,8 @@ pipeline {
         JAVA_OPTS = "-Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-scripts allow-same-origin; default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval';\""
         // Establece las variables de allure
         APP_VERSION = '1.0.0'
-        PLATFORM = 'Ubuntu/Linux'
-        BROWSER = 'Versión chromedriver: 130.0.6723.69'
+        PLATFORM = 'Ubuntu-Windows 2404.1.66.0'
+        BROWSER = 'Chromedriver: 130.0.6723.69'
     }
     stages {
         stage('Clean Up and Checkout ') {
@@ -61,16 +61,32 @@ pipeline {
                 }
             }
         }
+        stage('Enviar correo') {
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                sh """
+                    . ${VENV_DIR}/bin/activate > /dev/null 2>&1
+                    cd utils
+                    python3 send_email.py
+            """
+            }
+        }
     }
     post {
         always {
             script {
+                // Ejecuta Allure
                 allure includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS', results: [[path: 'tests/report']]
-                // Publica la URL del reporte en la consola de Jenkins
+                
+                // Define las URLs de los reportes
                 def allureReportUrl = "${env.BUILD_URL}allure"
-                echo "El reporte de Allure está disponible en: ${allureReportUrl}"
                 def reportpy = "${env.BUILD_URL}execution/node/3/ws/tests/pytestreport/report.html"
+                
+                // Imprime las URLs en consola
+                echo "El reporte de Allure está disponible en: ${allureReportUrl}"
                 echo "El reporte de Pytest está disponible en: ${reportpy}"
+                
+                // Archiva los reportes de Pytest y datos adicionales
                 archiveArtifacts artifacts: 'tests/pytestreport/report.html', allowEmptyArchive: true
                 archiveArtifacts artifacts: 'tests/data/PRES_2024.csv', allowEmptyArchive: true
             }
