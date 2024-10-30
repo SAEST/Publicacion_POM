@@ -61,17 +61,6 @@ pipeline {
                 }
             }
         }
-        // stage('Enviar correo') {
-        //     steps {
-        //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-        //         sh """
-        //             . ${VENV_DIR}/bin/activate > /dev/null 2>&1
-        //             cd utils
-        //             python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}
-        //         """
-        //         }
-        //     }
-        // }
     }
     post {
         always {
@@ -85,8 +74,6 @@ pipeline {
 
                 env.BUILD_RESULT = currentBuild.currentResult
                 env.BUILD_DURATION = currentBuild.durationString.replace('and counting', '').trim()
-                echo "${BUILD_RESULT}"
-                echo "${BUILD_DURATION}"
 
                 // Imprime las URLs en consola
                 echo "El reporte de Allure está disponible en: ${allureReportUrl}"
