@@ -81,8 +81,6 @@ pipeline {
                 env.BUILD_DURATION = "${minutes}m ${seconds}s"
 
                 // Imprime las URLs en consola
-                echo "Resultado del build: ${env.BUILD_RESULT}"
-                echo "Duración del build: ${env.BUILD_DURATION}"
                 echo "El reporte de Allure está disponible en: ${allureReportUrl}"
                 echo "El reporte de Pytest está disponible en: ${reportpy}"
                 
