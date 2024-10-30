@@ -4,33 +4,50 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 def enviar_correo():
-
-    build_result = os.getenv('BUILD_RESULT', 'Desconocido')  # Ajusta la variable si la tienes configurada
-    build_duration = os.getenv('BUILD_DURATION', 'Desconocido')
-
     # Configuración del servidor SMTP de Gmail
     smtp_host = "smtp.gmail.com"
     smtp_port = 465
     smtp_user = "dpit.saest.dest@gmail.com"  # Reemplaza con tu email
     smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
 
+    # Información del build de Jenkins
+    build_name = os.getenv('JOB_NAME', 'Desconocido')
+    build_number = os.getenv('BUILD_NUMBER', 'Desconocido')
+    build_result = os.getenv('BUILD_RESULT', 'Desconocido')  # Ajusta la variable si la tienes configurada
+    build_duration = os.getenv('BUILD_DURATION', 'Desconocido')
+    build_url = os.getenv('BUILD_URL', 'Desconocido')
+    allure_report_url = f"{build_url}allure"
+    pytest_report_url = f"{build_url}execution/node/3/ws/tests/pytestreport/report.html"
+    blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{build_name}/detail/{build_name}/{build_number}/pipeline"
+ 
     # Configuración del mensaje
     destinatarios = ["eric.ruiz@ine.mx", "kaderodi@gmail.com"]
-    subject = f"Resultado de ejecución de Pipeline: {os.getenv('JOB_NAME', 'Desconocido')} Número:{os.getenv('BUILD_NUMBER', 'Desconocido')}"
-    
-    # Cuerpo del mensaje en HTML
-    allure_report_url = f"{os.getenv('BUILD_URL')}allure"
-    pytest_report_url = f"{os.getenv('BUILD_URL')}execution/node/3/ws/tests/pytestreport/report.html"
-    blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{os.getenv('JOB_NAME')}/detail/{os.getenv('JOB_NAME')}/{os.getenv('BUILD_ID')}/pipeline"
-    
+    subject = f"Resultado de ejecución de Pipeline: {build_name} Número: {build_number}"
+     
     body = f"""
-    <p>El pipeline ha finalizado con el estado: {os.getenv('BUILD_STATUS', 'Desconocido')}</p>
-    <p>El pipeline ha finalizado con el estado: {build_result}</p>
-    <p>Duración pipeline: {build_duration}</p>
-    <p>Revisa los detalles en Jenkins: <a href="{os.getenv('BUILD_URL')}">{os.getenv('BUILD_URL')}</a></p>
-    <p>Revisa los detalles en Open Blue Ocean: <a href="{blue_ocean_url}">{blue_ocean_url}</a></p>
-    <p>Reporte Allure: <a href="{allure_report_url}">{allure_report_url}</a></p>
-    <p>Reporte Pytest: <a href="{pytest_report_url}">{pytest_report_url}</a></p>
+        <h2 style="color: #2E86C1;">Reporte de Ejecución del Pipeline</h2>
+        <p>Estimado equipo,</p>
+        <p>El pipeline <strong>{build_name}</strong> ha finalizado. Aquí está el resumen:</p>
+        <table style="width: 50%; border: 1px solid #ddd; border-collapse: collapse;">
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">Build Number</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{build_number}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">Estado</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{build_result}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">Duración</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{build_duration}</td>
+            </tr>
+        </table>
+        <p>Revisa más detalles:</p>
+        <a href="{allure_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5cb85c; text-decoration: none;">Reporte Allure</a><br><br>
+        <a href="{pytest_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5bc0de; text-decoration: none;">Reporte Pytest</a>
+        <a href="{blue_ocean_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5bc0de; text-decoration: none;">Pipeline Blue Ocean</a>
+        <a href="{build_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5bc0de; text-decoration: none;">Pipeline Jenkins</a>
+        <p>Atentamente,<br>Equipo de DevOps</p>
     """
 
     # Crear el mensaje MIME
