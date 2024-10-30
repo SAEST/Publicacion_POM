@@ -74,7 +74,7 @@ pipeline {
 
                 env.BUILD_RESULT = currentBuild.currentResult
                 // env.BUILD_DURATION = currentBuild.durationString.replace('and counting', '').trim()
-                env.BUILD_DURATION = currentBuild.durationString ? currentBuild.durationString.replaceAll('( and counting|\\sand\\scounting)', '').trim() : "Duración no disponible"
+                env.BUILD_DURATION = currentBuild.durationString
 
                 // Imprime las URLs en consola
                 echo "El reporte de Allure está disponible en: ${allureReportUrl}"
