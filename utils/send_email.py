@@ -15,7 +15,7 @@ def enviar_correo():
     build_name = os.getenv('JOB_NAME', 'Desconocido')
     build_result = sys.argv[1] if len(sys.argv) > 1 else 'Desconocido'
     build_duration = sys.argv[2] if len(sys.argv) > 2 else 'Desconocido'
-    build_duration = os.getenv('BUILD_DURATION', 'Desconocido')
+    build_number = os.getenv('BUILD_NUMBER', 'Desconocido')
     build_url = os.getenv('BUILD_URL', 'Desconocido')
     allure_report_url = f"{build_url}allure"
     pytest_report_url = f"{build_url}execution/node/3/ws/tests/pytestreport/report.html"
