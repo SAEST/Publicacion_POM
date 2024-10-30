@@ -4,6 +4,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 def enviar_correo():
+
+    build_result = os.getenv('BUILD_RESULT', 'Desconocido')  # Ajusta la variable si la tienes configurada
+    build_duration = os.getenv('BUILD_DURATION', 'Desconocido')
+
     # Configuración del servidor SMTP de Gmail
     smtp_host = "smtp.gmail.com"
     smtp_port = 465
@@ -20,8 +24,9 @@ def enviar_correo():
     blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{os.getenv('JOB_NAME')}/detail/{os.getenv('JOB_NAME')}/{os.getenv('BUILD_ID')}/pipeline"
     
     body = f"""
-    <p>El pipeline ha finalizado con el estado: {os.getenv('BUILD_RESULT', 'Desconocido')}</p>
-    <p>Duración pipeline: {os.getenv('BUILD_DURATION')}</p>
+    <p>El pipeline ha finalizado con el estado: {os.getenv('BUILD_STATUS', 'Desconocido')}</p>
+    <p>El pipeline ha finalizado con el estado: {build_result}</p>
+    <p>Duración pipeline: {build_duration}</p>
     <p>Revisa los detalles en Jenkins: <a href="{os.getenv('BUILD_URL')}">{os.getenv('BUILD_URL')}</a></p>
     <p>Revisa los detalles en Open Blue Ocean: <a href="{blue_ocean_url}">{blue_ocean_url}</a></p>
     <p>Reporte Allure: <a href="{allure_report_url}">{allure_report_url}</a></p>
