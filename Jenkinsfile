@@ -61,17 +61,17 @@ pipeline {
                 }
             }
         }
-        stage('Enviar correo') {
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                sh """
-                    . ${VENV_DIR}/bin/activate > /dev/null 2>&1
-                    cd utils
-                    python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}
-                """
-                }
-            }
-        }
+        // stage('Enviar correo') {
+        //     steps {
+        //         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+        //         sh """
+        //             . ${VENV_DIR}/bin/activate > /dev/null 2>&1
+        //             cd utils
+        //             python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}
+        //         """
+        //         }
+        //     }
+        // }
     }
     post {
         always {
@@ -95,6 +95,10 @@ pipeline {
                 // Archiva los reportes de Pytest y datos adicionales
                 archiveArtifacts artifacts: 'tests/pytestreport/report.html', allowEmptyArchive: true
                 archiveArtifacts artifacts: 'tests/data/PRES_2024.csv', allowEmptyArchive: true
+            }
+            steps {
+                sh "cd utils"
+                sh "python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}"
             }
         }
     }
