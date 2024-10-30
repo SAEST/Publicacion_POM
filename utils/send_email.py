@@ -21,8 +21,8 @@ def enviar_correo():
     blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{build_name}/detail/{build_name}/{build_number}/pipeline"
  
     # Configuración del mensaje
-    destinatarios = ["eric.ruiz@ine.mx", "kaderodi@gmail.com"]
-    subject = f"Resultado de ejecución de Pipeline: {build_name} Número: {build_number}"
+    destinatarios = ["eric.ruiz@ine.mx", "georgina.cuadriello@ine.mx"]
+    subject = f"[DEST][Jenkins] Resultado de ejecución de Pipeline: {build_name} Número: {build_number}"
      
     body = f"""
         <h2 style="color: #2E86C1;">Reporte de Ejecución del Pipeline</h2>
@@ -47,7 +47,7 @@ def enviar_correo():
         <a href="{pytest_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5cb85c; text-decoration: none;">Reporte Pytest</a><br><br>
         <a href="{blue_ocean_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5bc0de; text-decoration: none;">Pipeline Blue Ocean</a>
         <a href="{build_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5bc0de; text-decoration: none;">Pipeline Jenkins</a>
-        <p>Atentamente,<br>Equipo de DevOps - QA</p>
+        <p>Atentamente.<br>Equipo de DevOps - QA</p>
     """
 
     # Crear el mensaje MIME
