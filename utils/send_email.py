@@ -3,7 +3,6 @@ import sys
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import xml.etree.ElementTree as ET
 
 def enviar_correo():
     # Configuración del servidor SMTP de Gmail
@@ -12,23 +11,6 @@ def enviar_correo():
     smtp_user = "dpit.saest.dest@gmail.com"  # Reemplaza con tu email
     smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
 
-    # Ruta del archivo XML de pytest
-    report_path = '/tests/pytestreport/report3.xml'
-
-    # Extrae los resultados de pruebas desde el XML
-    def parse_test_results(report_path):
-        tree = ET.parse(report_path)
-        root = tree.getroot()
-
-        total_tests = int(root.attrib.get("tests", 0))
-        failures = int(root.attrib.get("failures", 0))
-        errors = int(root.attrib.get("errors", 0))
-        skipped = int(root.attrib.get("skipped", 0))
-        passed = total_tests - failures - errors - skipped
-
-        summary = f"Total: {total_tests}, Passed: {passed}, Failed: {failures}, Errors: {errors}, Skipped: {skipped}"
-        return summary, failures
-    
     # Información del build de Jenkins
     build_name = os.getenv('JOB_NAME', 'Desconocido')
     build_result = sys.argv[1] if len(sys.argv) > 1 else 'Desconocido'
@@ -38,10 +20,9 @@ def enviar_correo():
     allure_report_url = f"{build_url}allure"
     pytest_report_url = f"{build_url}execution/node/3/ws/tests/pytestreport/report.html"
     blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{build_name}/detail/{build_name}/{build_number}/pipeline"
-    summary, failures = parse_test_results(report_path)
-
+ 
     # Configuración del mensaje
-    destinatarios = ["eric.ruiz@ine.mx"] #, "georgina.cuadriello@ine.mx"
+    destinatarios = ["eric.ruiz@ine.mx", "georgina.cuadriello@ine.mx"]
     subject = f"[DEST][Jenkins] Resultado de ejecución de Pipeline: {build_name} Número: {build_number}"
      
     body = f"""
@@ -62,8 +43,6 @@ def enviar_correo():
                 <td style="padding: 8px; border: 1px solid #ddd;">{build_duration}</td>
             </tr>
         </table>
-        <h4>Test Summary</h4>
-        <p>{summary}</p>
         <p>Revisa más detalles:</p>
         <a href="{allure_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5cb85c; text-decoration: none;">Reporte Allure</a>
         <a href="{pytest_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5cb85c; text-decoration: none;">Reporte Pytest</a><br><br>
@@ -71,8 +50,6 @@ def enviar_correo():
         <a href="{build_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5bc0de; text-decoration: none;">Pipeline Jenkins</a>
         <p>Atentamente.<br>Equipo de DevOps - QA</p>
     """
-    if failures > 0:
-        body += "<p><strong>Attention:</strong> One or more tests have failed.</p>"
 
     # Crear el mensaje MIME
     mensaje = MIMEMultipart()

@@ -55,7 +55,7 @@ pipeline {
                     cd tests
                     pytest test_descarga_csv.py --html=pytestreport/report1.html --self-contained-html --alluredir=report
                     pytest test_public_page.py --html=pytestreport/report2.html --self-contained-html --alluredir=report
-                    pytest test_public_tcsv.py --html=pytestreport/report3.xml --self-contained-html --alluredir=report
+                    pytest test_public_tcsv.py --html=pytestreport/report3.html --self-contained-html --alluredir=report
                     pytest_html_merger -i /var/jenkins_home/workspace/Publicacion_POM/tests/pytestreport -o /var/jenkins_home/workspace/Publicacion_POM/tests/pytestreport/report.html
                """
                 }
