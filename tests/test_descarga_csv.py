@@ -35,8 +35,8 @@ print(f'Archivo ZIP "{archivo_zip1}" descomprimido exitosamente en "{directorio_
 
 @pytest.fixture
 def directorio_destino():
-    #return "./data" #Jenkins
-    return "../data" #Windows
+    return "./data" #Jenkins
+    #return "../data" #Windows
 
 @pytest.mark.parametrize("archivo_zip, archivos_esperados", [("20240603_2005_PREP_PRES.zip", ["PRES_2024.csv", "PRES_CANDIDATURAS_2024.csv"]),])
 @allure.feature('Descarga de CSV Presidencia')  
