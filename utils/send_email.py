@@ -13,7 +13,7 @@ def enviar_correo():
     smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
 
 # Ruta del archivo XML de pytest
-    report_path = '../tests/pytestreport/report.xml'
+    report_path = './tests/pytestreport/report.xml'
 
     # Extrae los resultados de pruebas desde el XML
     def parse_test_results(report_path):
