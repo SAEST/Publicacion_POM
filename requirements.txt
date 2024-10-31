@@ -8,3 +8,4 @@ pytest
 allure-pytest
 pytest-html
 pytest-html-merger
+beautifulsoup4

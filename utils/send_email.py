@@ -3,6 +3,7 @@ import sys
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from bs4 import BeautifulSoup
 
 def enviar_correo():
     # Configuración del servidor SMTP de Gmail
@@ -11,6 +12,31 @@ def enviar_correo():
     smtp_user = "dpit.saest.dest@gmail.com"  # Reemplaza con tu email
     smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
 
+    # Abre el archivo HTML y extrae la información necesaria
+    with open('./tests/pytestreport/report.html', 'r') as f:
+        soup = BeautifulSoup(f, 'html.parser')
+        
+        # Encuentra la sección donde se resume el estado de las pruebas
+        try:
+            total_tests = soup.find("span", {"class": "run-count"}).text
+        except AttributeError:
+            total_tests = "Total tests not found"
+        try:
+            passed_tests = soup.find("span", {"class": "passed"}).text
+        except AttributeError:
+            passed_tests = "passed_tests not found"
+        try:
+            failed_tests = soup.find("span", {"class": "failed"}).text
+        except AttributeError:
+            failed_tests = "failed_tests not found"
+
+    summary = f"""
+    Resumen de Pruebas:
+    - Total de pruebas: {total_tests}
+    - Pruebas exitosas: {passed_tests}
+    - Pruebas fallidas: {failed_tests}
+    """
+    
     # Información del build de Jenkins
     build_name = os.getenv('JOB_NAME', 'Desconocido')
     build_result = sys.argv[1] if len(sys.argv) > 1 else 'Desconocido'
@@ -22,7 +48,7 @@ def enviar_correo():
     blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{build_name}/detail/{build_name}/{build_number}/pipeline"
  
     # Configuración del mensaje
-    destinatarios = ["eric.ruiz@ine.mx", "georgina.cuadriello@ine.mx"]
+    destinatarios = ["eric.ruiz@ine.mx"] #, "georgina.cuadriello@ine.mx"
     subject = f"[DEST][Jenkins] Resultado de ejecución de Pipeline: {build_name} Número: {build_number}"
      
     body = f"""
@@ -43,6 +69,7 @@ def enviar_correo():
                 <td style="padding: 8px; border: 1px solid #ddd;">{build_duration}</td>
             </tr>
         </table>
+        <p>{summary}</p>
         <p>Revisa más detalles:</p>
         <a href="{allure_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5cb85c; text-decoration: none;">Reporte Allure</a>
         <a href="{pytest_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5cb85c; text-decoration: none;">Reporte Pytest</a><br><br>
