@@ -6,7 +6,8 @@ import allure
 
 url = 'https://prep2024.ine.mx/publicacion/nacional/assets/20240603_2005_PREP.zip'
 nombre_archivo = '20240603_2005_PREP.zip'
-directorio_destino = './data'  # Carpeta donde se van a extraer los archivos
+directorio_destino = './data'  # Carpeta donde se van a extraer los archivos en Jenkins
+#directorio_destino = '../data'  # Carpeta donde se van a extraer los archivos en Windows
 ruta_completa = os.path.join(directorio_destino, nombre_archivo)
 
 # Crear la carpeta de destino si no existe
@@ -34,7 +35,8 @@ print(f'Archivo ZIP "{archivo_zip1}" descomprimido exitosamente en "{directorio_
 
 @pytest.fixture
 def directorio_destino():
-    return "./data"
+    return "./data" #Jenkins
+    #return "../data" #Windows
 
 @pytest.mark.parametrize("archivo_zip, archivos_esperados", [("20240603_2005_PREP_PRES.zip", ["PRES_2024.csv", "PRES_CANDIDATURAS_2024.csv"]),])
 @allure.feature('Descarga de CSV Presidencia')  
