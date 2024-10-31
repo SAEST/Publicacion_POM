@@ -4,7 +4,8 @@ import re
 import pytest
 import allure
 
-file_path = '/var/jenkins_home/workspace/Publicacion_POM/tests/data/PRES_2024.csv'
+file_path = '/var/jenkins_home/workspace/Publicacion_POM/tests/data/PRES_2024.csv' #Jenkins
+#file_path = '../data/PRES_2024.csv'  #Windows local
 df = pd.read_csv(file_path, skiprows=4, delimiter=',', low_memory=False)  # Cambia ';' por el delimitador correcto
 df1 = pd.read_csv(file_path, skiprows=3, nrows=1, header=None, names=["ACTAS_ESPERADAS","ACTAS_REGISTRADAS","ACTAS_FUERA_CATALOGO","ACTAS_CAPTURADAS","PORCENTAJE_ACTAS_CAPTURADAS","ACTAS_CONTABILIZADAS","PORCENTAJE_ACTAS_CONTABILIZADAS","PORCENTAJE_ACTAS_INCONSISTENCIAS","ACTAS_NO_CONTABILIZADAS","LISTA_NOMINAL_ACTAS_CONTABILIZADAS","TOTAL_VOTOS_C_CS","TOTAL_VOTOS_S_CS","PORCENTAJE_PARTICIPACION_CIUDADANA"])
 
@@ -151,12 +152,15 @@ def test_actas_registradas_coinciden():
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de ACTAS_REGISTRADAS coinciden: Conteo CSV: {value_counts3} Encabezado CSV: {actas_regis}')
         else:
             allure.attach(
                 f"Los valores de ACTAS_REGISTRADAS no coinciden. Conteo CSV: {value_counts3} Encabezado CSV: {actas_regis}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f"Los valores de ACTAS_REGISTRADAS no coinciden. Conteo CSV: {value_counts3} Encabezado CSV: {actas_regis}")
+            #print(f'')
         try:
             assert np.array_equal(value_counts3, actas_regis)
         except AssertionError:
