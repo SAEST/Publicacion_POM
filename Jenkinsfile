@@ -88,7 +88,12 @@ pipeline {
                 archiveArtifacts artifacts: 'tests/pytestreport/report.html', allowEmptyArchive: true
                 archiveArtifacts artifacts: 'tests/data/PRES_2024.csv', allowEmptyArchive: true
 
-                sh "cd utils && python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}"
+                sh """
+                    . ${VENV_DIR}/bin/activate
+                    cd utils
+                    python3 send_email.py
+                """
+                //sh "cd utils && python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}"
             }
         }
     }
