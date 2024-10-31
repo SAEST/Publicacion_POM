@@ -13,7 +13,7 @@ def enviar_correo():
     smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
 
     # Abre el archivo HTML y extrae la información necesaria
-    with open('./tests/pytestreport/report.html', 'r') as f:
+    with open('/var/jenkins_home/workspace/Publicacion_POM/tests/pytestreport/report.html', 'r') as f:
         soup = BeautifulSoup(f, 'html.parser')
         
         # Encuentra la sección donde se resume el estado de las pruebas
