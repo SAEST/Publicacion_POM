@@ -12,8 +12,8 @@ def enviar_correo():
     smtp_user = "dpit.saest.dest@gmail.com"  # Reemplaza con tu email
     smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
 
-# Ruta del archivo XML de pytest
-    report_path = '/tests/pytestreport/report.xml'
+    # Ruta del archivo XML de pytest
+    report_path = '/tests/pytestreport/report.html'
 
     # Extrae los resultados de pruebas desde el XML
     def parse_test_results(report_path):
