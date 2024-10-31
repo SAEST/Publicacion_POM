@@ -6,8 +6,8 @@ import allure
 
 url = 'https://prep2024.ine.mx/publicacion/nacional/assets/20240603_2005_PREP.zip'
 nombre_archivo = '20240603_2005_PREP.zip'
-#directorio_destino = './data'  # Carpeta donde se van a extraer los archivos en Jenkins
-directorio_destino = '../data'  # Carpeta donde se van a extraer los archivos en Windows
+directorio_destino = './data'  # Carpeta donde se van a extraer los archivos en Jenkins
+#directorio_destino = '../data'  # Carpeta donde se van a extraer los archivos en Windows
 ruta_completa = os.path.join(directorio_destino, nombre_archivo)
 
 # Crear la carpeta de destino si no existe
