@@ -18,7 +18,7 @@ def enviar_correo():
         
         # Encuentra la sección donde se resume el estado de las pruebas
         try:
-            total_tests = soup.find("span", {"class": "run-count"}).text
+            total_tests = soup.find("p", {"class": "run-count"}).text
         except AttributeError:
             total_tests = "Total tests not found"
         try:
@@ -29,14 +29,7 @@ def enviar_correo():
             failed_tests = soup.find("span", {"class": "failed"}).text
         except AttributeError:
             failed_tests = "failed_tests not found"
-
-    summary = f"""
-    Resumen de Pruebas:
-    - Total de pruebas: {total_tests}
-    - Pruebas exitosas: {passed_tests}
-    - Pruebas fallidas: {failed_tests}
-    """
-    
+  
     # Información del build de Jenkins
     build_name = os.getenv('JOB_NAME', 'Desconocido')
     build_result = sys.argv[1] if len(sys.argv) > 1 else 'Desconocido'
@@ -68,8 +61,19 @@ def enviar_correo():
                 <td style="padding: 8px; border: 1px solid #ddd;">Duración</td>
                 <td style="padding: 8px; border: 1px solid #ddd;">{build_duration}</td>
             </tr>
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">Total de pruebas</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{total_tests}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">Pruebas exitosas</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{passed_tests}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">Pruebas fallidas</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{failed_tests}</td>
+            </tr>
         </table>
-        <p>{summary}</p>
         <p>Revisa más detalles:</p>
         <a href="{allure_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5cb85c; text-decoration: none;">Reporte Allure</a>
         <a href="{pytest_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5cb85c; text-decoration: none;">Reporte Pytest</a><br><br>
