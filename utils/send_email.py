@@ -13,7 +13,8 @@ def enviar_correo():
     smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
 
     # Abre el archivo HTML y extrae la información necesaria
-    with open('/var/jenkins_home/workspace/Publicacion_POM/tests/pytestreport/report.html', 'r') as f:
+    with open('/var/jenkins_home/workspace/Publicacion_POM/tests/pytestreport/report.html', 'r') as f: #Jenkins
+    #with open('./tests/pytestreport/report.html', 'r') as f:  # windows local
         soup = BeautifulSoup(f, 'html.parser')
         
         # Encuentra la sección donde se resume el estado de las pruebas
@@ -29,6 +30,10 @@ def enviar_correo():
             failed_tests = soup.find("span", {"class": "failed"}).text
         except AttributeError:
             failed_tests = "failed_tests not found"
+        try:
+            error_tests = soup.find("span", {"class": "error"}).text
+        except AttributeError:
+            error_tests = "error_tests not found"
   
     # Información del build de Jenkins
     build_name = os.getenv('JOB_NAME', 'Desconocido')
@@ -41,7 +46,7 @@ def enviar_correo():
     blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{build_name}/detail/{build_name}/{build_number}/pipeline"
  
     # Configuración del mensaje
-    destinatarios = ["eric.ruiz@ine.mx"] #, "georgina.cuadriello@ine.mx"
+    destinatarios = ["eric.ruiz@ine.mx", "georgina.cuadriello@ine.mx"]
     subject = f"[DEST][Jenkins] Resultado de ejecución de Pipeline: {build_name} Número: {build_number}"
      
     body = f"""
@@ -72,6 +77,10 @@ def enviar_correo():
             <tr>
                 <td style="padding: 8px; border: 1px solid #ddd;">Pruebas fallidas</td>
                 <td style="padding: 8px; border: 1px solid #ddd;">{failed_tests}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border: 1px solid #ddd;">Errores</td>
+                <td style="padding: 8px; border: 1px solid #ddd;">{error_tests}</td>
             </tr>
         </table>
         <p>Revisa más detalles:</p>

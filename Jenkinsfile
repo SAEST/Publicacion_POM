@@ -93,7 +93,6 @@ pipeline {
                     cd utils
                     python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}
                 """
-                //sh "cd utils && python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}"
             }
         }
     }
