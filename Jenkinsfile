@@ -52,7 +52,6 @@ pipeline {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                 sh """
                     . ${VENV_DIR}/bin/activate > /dev/null 2>&1
-                    cd tests
                     pytest tests/test_descarga_csv.py --html=reports/pytestreport/report1.html --self-contained-html --alluredir=reports/report
                     pytest_html_merger -i /var/jenkins_home/workspace/Publicacion_POM/reports/pytestreport -o /var/jenkins_home/workspace/Publicacion_POM/reports/pytestreport/report.html
                """
