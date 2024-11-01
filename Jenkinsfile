@@ -43,6 +43,7 @@ pipeline {
                         echo 'APP_VERSION=${env.APP_VERSION}' >> ${alluredir}/environment.properties
                         echo 'PLATFORM=${env.PLATFORM}' >> ${alluredir}/environment.properties
                         echo 'BROWSER=${env.BROWSER}' >> ${alluredir}/environment.properties
+                        echo 'BUILD_URL=${env.BUILD_URL}'
                     """
                 }
             }
