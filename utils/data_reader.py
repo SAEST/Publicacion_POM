@@ -14,7 +14,7 @@ class data_reader():
     @staticmethod
     def df():
         # Leer el archivo CSV en un DataFrame
-        csv_path = '/var/jenkins_home/workspace/Publicacion_POM/tests/data/PRES_2024.csv'
+        csv_path = './data/bd/pres-csv/PRES_2024.csv'
         df = pd.read_csv(csv_path, skiprows=3, nrows=1, header=None, names=[
             "ACTAS_ESPERADAS", "ACTAS_REGISTRADAS", "ACTAS_FUERA_CATALOGO", 
             "ACTAS_CAPTURADAS", "PORCENTAJE_ACTAS_CAPTURADAS", 
