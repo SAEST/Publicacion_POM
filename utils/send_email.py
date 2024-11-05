@@ -13,8 +13,7 @@ def enviar_correo():
     smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
 
     # Abre el archivo HTML y extrae la información necesaria
-    with open('/var/jenkins_home/workspace/Publicacion_POM/tests/pytestreport/report.html', 'r') as f: #Jenkins
-    #with open('./tests/pytestreport/report.html', 'r') as f:  # windows local
+    with open('./reports/pytestreport/report.html', 'r') as f: 
         soup = BeautifulSoup(f, 'html.parser')
         
         # Encuentra la sección donde se resume el estado de las pruebas
@@ -42,7 +41,7 @@ def enviar_correo():
     build_number = os.getenv('BUILD_NUMBER', 'Desconocido')
     build_url = os.getenv('BUILD_URL', 'Desconocido')
     allure_report_url = f"{build_url}allure"
-    pytest_report_url = f"{build_url}execution/node/3/ws/tests/pytestreport/report.html"
+    pytest_report_url = f"{build_url}execution/node/3/ws/reports/pytestreport/report.html"
     blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{build_name}/detail/{build_name}/{build_number}/pipeline"
  
     # Configuración del mensaje

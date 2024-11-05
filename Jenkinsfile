@@ -90,8 +90,7 @@ pipeline {
 
                 sh """
                     . ${VENV_DIR}/bin/activate
-                    cd utils
-                    python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}
+                    python3 utils/send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}
                 """
             }
         }
