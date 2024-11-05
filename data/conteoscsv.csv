@@ -1,0 +1,13 @@
+﻿allure_story,valor,valor2,encabezado
+Validación de Actas Registradas,value_counts3,actas_regis,ACTAS_REGISTRADAS
+Validación de Actas Fuera de Catálogo,value_counts1,actas_fuera,ACTAS_FUERA_CATALOGO
+Validación de Actas Capturadas,value_counts4,actas_cap,ACTAS_CAPTURADAS
+Validación de Porcentaje de Actas Capturadas,value_counts5,actas_cap_por,PORCENTAJE_ACTAS_CAPTURADAS
+Validación de Actas Contabilizadas,value_counts,actas_con,ACTAS_CONTABILIZADAS
+Validación de Porcentaje de Actas Contabilizadas,value_counts6,actas_con_por,PORCENTAJE_ACTAS_CONTABILIZADAS
+Validación de Porcentaje de Actas con Inconcistencias,value_counts7,actas_incon_por,PORCENTAJE_ACTAS_INCONSISTENCIAS
+Validación de Actas No Contabilizadas,value_counts2,actas_nocon,ACTAS_NO_CONTABILIZADAS
+Validación de Lista Nominal de Actas Contabilizadas,value_counts8,lnactascon,LISTA_NOMINAL_ACTAS_CONTABILIZADAS
+Validación de Total Votos C_CS,value_counts10,totalvotosc,TOTAL_VOTOS_C_CS
+Validación de Total de Votos S_CS,value_counts11,totalvotoss,TOTAL_VOTOS_S_CS
+Validación de Porcentaje de Participación Ciudadana,value_counts9,participacionciu,PORCENTAJE_PARTICIPACION_CIUDADANA
