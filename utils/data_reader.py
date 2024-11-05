@@ -5,18 +5,23 @@ class data_reader():
     # Función para leer datos desde el CSV y eliminar el BOM si está presente
     @staticmethod
     def leer_datos_csv():
-        filepath = '/var/jenkins_home/workspace/Publicacion_POM/data/elementos.csv' # jenkins
-        #filepath = '../data/elementos.csv' # windows
+        filepath = './data/elementos.csv'
         df = pd.read_csv(filepath, encoding='utf-8-sig')
 
         for index, row in df.iterrows():
             yield row['allure_story'], row['valor'], row['tipo_dato'], row['selector'], row['ruta']
 
+    def leer_datos_csv2():
+        filepath = './data/conteoscsv.csv'
+        df = pd.read_csv(filepath, encoding='utf-8-sig')
+
+        for index, row in df.iterrows():
+            yield row['allure_story'], row['valor'], row['valor2'], row['encabezado']
+
     @staticmethod
     def df():
         # Leer el archivo CSV en un DataFrame
-        csv_path = '/var/jenkins_home/workspace/Publicacion_POM/tests/data/PRES_2024.csv' #Jenkins
-        #csv_path = '../data/PRES_2024.csv' #Windows
+        csv_path = './data/bd/pres-csv/PRES_2024.csv'
         df = pd.read_csv(csv_path, skiprows=3, nrows=1, header=None, names=[
             "ACTAS_ESPERADAS", "ACTAS_REGISTRADAS", "ACTAS_FUERA_CATALOGO", 
             "ACTAS_CAPTURADAS", "PORCENTAJE_ACTAS_CAPTURADAS", 

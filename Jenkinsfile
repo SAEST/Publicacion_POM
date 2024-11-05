@@ -35,28 +35,29 @@ pipeline {
             steps {
                 script {
                     // Generar archivo environment.properties con variables de entorno
-                    def alluredir = "tests/report"
+                    def alluredir = "reports/report"
                     sh "mkdir -p ${alluredir}"
-                    def pytestdir = "tests/pytestreport"
+                    def pytestdir = "reports/pytestreport"
                     sh "mkdir -p ${pytestdir}"
                     sh """
                         echo 'APP_VERSION=${env.APP_VERSION}' >> ${alluredir}/environment.properties
                         echo 'PLATFORM=${env.PLATFORM}' >> ${alluredir}/environment.properties
                         echo 'BROWSER=${env.BROWSER}' >> ${alluredir}/environment.properties
+                        echo 'BUILD_URL=${env.BUILD_URL}'
                     """
                 }
             }
         }
-        stage('Ejecutar Pytest Selenium POM') {
+        stage('Ejecutar Test con Pytest, Selenium - POM') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                 sh """
                     . ${VENV_DIR}/bin/activate > /dev/null 2>&1
                     cd tests
-                    pytest test_descarga_csv.py --html=pytestreport/report1.html --self-contained-html --alluredir=report
-                    pytest test_public_page.py --html=pytestreport/report2.html --self-contained-html --alluredir=report
-                    pytest test_public_tcsv.py --html=pytestreport/report3.html --self-contained-html --alluredir=report
-                    pytest_html_merger -i /var/jenkins_home/workspace/Publicacion_POM/tests/pytestreport -o /var/jenkins_home/workspace/Publicacion_POM/tests/pytestreport/report.html
+                    pytest tests/test_descarga_csv.py --html=reports/pytestreport/report1.html --self-contained-html --alluredir=reports/report
+                    pytest tests/test_public_page.py --html=reports/pytestreport/report2.html --self-contained-html --alluredir=reports/report
+                    pytest tests/test_conteos_csv.py --html=reports/pytestreport/report3.html --self-contained-html --alluredir=reports/report
+                    pytest_html_merger -i /var/jenkins_home/workspace/Publicacion_POM/reports/pytestreport -o /var/jenkins_home/workspace/Publicacion_POM/reports/pytestreport/report.html
                """
                 }
             }
@@ -66,11 +67,11 @@ pipeline {
         always {
             script {
                 // Ejecuta Allure
-                allure includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS', results: [[path: 'tests/report']]
+                allure includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS', results: [[path: 'reports/report']]
                 
                 // Define las URLs de los reportes
                 def allureReportUrl = "${env.BUILD_URL}allure"
-                def reportpy = "${env.BUILD_URL}execution/node/3/ws/tests/pytestreport/report.html"
+                def reportpy = "${env.BUILD_URL}execution/node/3/ws/reports/pytestreport/report.html"
 
                 env.BUILD_RESULT = currentBuild.currentResult
                 // Convertir la duración a un formato legible
@@ -85,14 +86,10 @@ pipeline {
                 echo "El reporte de Pytest está disponible en: ${reportpy}"
                 
                 // Archiva los reportes de Pytest y datos adicionales
-                archiveArtifacts artifacts: 'tests/pytestreport/report.html', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'tests/data/PRES_2024.csv', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'reports/pytestreport/report.html', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'data/bd/pres-csv/PRES_2024.csv', allowEmptyArchive: true
 
-                sh """
-                    . ${VENV_DIR}/bin/activate
-                    cd utils
-                    python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}
-                """
+                sh "cd utils && python3 send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}"
             }
         }
     }
