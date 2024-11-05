@@ -13,13 +13,9 @@ from utils.utils import Utils
 def df():
     return data_reader.df()
 
-@pytest.fixture
-def screenshots_folder():
-    return "screenshots_publi"
-
 @pytest.mark.parametrize("allure_story, valor, tipo_dato, selector, ruta", data_reader.leer_datos_csv())
 @allure.feature('Validación de datos en sitio de Publicación - POM')
-def test_validacion_datos(setup, df, allure_story, valor, tipo_dato, selector, ruta, screenshots_folder):
+def test_validacion_datos(setup, df, allure_story, valor, tipo_dato, selector, ruta):
     """
     Prueba que los valores del encabezado del CSV coincidan con el sitio de publicacion: 
     https://prep2024.ine.mx/publicacion/nacional/presidencia/nacional/candidatura
@@ -53,7 +49,7 @@ def test_validacion_datos(setup, df, allure_story, valor, tipo_dato, selector, r
         else:
             pytest.fail(f"Tipo de dato no reconocido: {tipo_dato}")
 
-        file_path = public_page.highlight_and_capture_element(elemento, 'screenshots_publi')
+        file_path = public_page.highlight_and_capture_element(elemento)
         
         Utils.attach_allure_results(valor_en_pagina, valor_csv, file_path)
 

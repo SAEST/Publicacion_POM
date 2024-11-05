@@ -7,7 +7,7 @@ from .base_page import BasePage
 class PublicPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
-        self.screenshots_folder = 'screenshots_publi'
+        self.screenshots_folder = './reports/screenshots'
         self.ensure_screenshot_folder()
 
     def ensure_screenshot_folder(self):
@@ -24,8 +24,9 @@ class PublicPage(BasePage):
                 return path
             i += 1
 
-    def highlight_and_capture_element(self, elemento, screenshots_folder):
+    def highlight_and_capture_element(self, elemento):
         """Resalta y captura un elemento específico de la página pública."""
+        screenshots_folder = self.screenshots_folder
         element = elemento
         file_path = self.get_next_screenshot_path(screenshots_folder, 'captura_elemento')
         self.capture_element_screenshot(element, file_path)
