@@ -99,44 +99,42 @@ if TOTAL_VOTOS_CALCULADO in df.columns and TIPO_CASILLA in df.columns:
     # Convertir los datos a numéricos si es necesario
     df_filtrado9[TOTAL_VOTOS_CALCULADO] = pd.to_numeric(df_filtrado9[TOTAL_VOTOS_CALCULADO], errors='coerce')
 
-    value_counts = df_filtrado[CONTABILIZADA].value_counts()
-    value_counts1 = df_filtrado2[CONTABILIZADA].value_counts()
-    value_counts2 = df_filtrado3[CONTABILIZADA].value_counts()
+    value_counts = df_filtrado[CONTABILIZADA].astype(int).value_counts().sum()
+    value_counts1 = df_filtrado2[CONTABILIZADA].astype(int).value_counts().sum()
+    value_counts2 = df_filtrado3[CONTABILIZADA].astype(int).value_counts().sum()
     value_counts3 = df_filtrado4[CONTABILIZADA].astype(int).value_counts().sum() 
-    value_counts3 = [value_counts3]
     value_counts4 = df_filtrado5[CONTABILIZADA].astype(int).value_counts().sum() 
-    value_counts4 = [value_counts4]
     value_counts5 = (df_filtrado5[CONTABILIZADA].astype(int).value_counts().sum() * 100) / df1[ACTAS_ESPERADAS].astype(int).values 
     value_counts5 = pd.Series(value_counts5)
     value_counts5 = value_counts5.apply(lambda x: int(x * 10000) / 10000)
+    value_counts5 = value_counts5.iloc[0]
     value_counts6 = (df_filtrado[CONTABILIZADA].value_counts() * 100) / df1[ACTAS_ESPERADAS].astype(int).values 
     value_counts6 = pd.Series(value_counts6)
     value_counts6 = value_counts6.apply(lambda x: int(x * 10000) / 10000)
+    value_counts6 = value_counts6.iloc[0]
     value_counts7 = (df_filtrado6[OBSERVACIONES].value_counts().sum() * 100) / df1[ACTAS_ESPERADAS].astype(int).values 
     value_counts7 = pd.Series(value_counts7)
     value_counts7 = value_counts7.apply(lambda x: int(x * 10000) / 10000)
+    value_counts7 = value_counts7.iloc[0]
     value_counts8 = df_filtrado7[LISTA_NOMINAL].sum()
-    value_counts8 = [value_counts8]
     value_counts9 = (df_filtrado8[TOTAL_VOTOS_CALCULADO].sum() * 100) / value_counts8
     value_counts9 = pd.Series(value_counts9)
     value_counts9 = value_counts9.apply(lambda x: int(x * 10000) / 10000)
+    value_counts9 = value_counts9.iloc[0]
     value_counts10 = df_filtrado8[TOTAL_VOTOS_CALCULADO].sum()
-    value_counts10 = [value_counts10]
     value_counts11 = df_filtrado9[TOTAL_VOTOS_CALCULADO].sum()
-    value_counts11 = [value_counts11]
-    actas_regis = df1[ACTAS_REGISTRADAS].values
-    actas_fuera = df1[ACTAS_FUERA_CATALOGO].values
-    actas_cap = df1[ACTAS_CAPTURADAS].values
-    actas_cap_por = df1[PORCENTAJE_ACTAS_CAPTURADAS].values
-    actas_con = df1[ACTAS_CONTABILIZADAS].values
-    actas_con_por = df1[PORCENTAJE_ACTAS_CONTABILIZADAS].values
-    actas_incon_por = df1[PORCENTAJE_ACTAS_INCONSISTENCIAS].values
-    actas_nocon = df1[ACTAS_NO_CONTABILIZADAS].values
-    lnactascon = df1[LISTA_NOMINAL_ACTAS_CONTABILIZADAS].values
-    totalvotosc = df1[TOTAL_VOTOS_C_CS].values
-    totalvotoss = df1[TOTAL_VOTOS_S_CS].values
-    participacionciu = df1[PORCENTAJE_PARTICIPACION_CIUDADANA].values
-    #print(value_counts11)
+    actas_regis = int(df1[ACTAS_REGISTRADAS].values[0])
+    actas_fuera = int(df1[ACTAS_FUERA_CATALOGO].values[0])
+    actas_cap = int(df1[ACTAS_CAPTURADAS].values[0])
+    actas_cap_por = float(df1[PORCENTAJE_ACTAS_CAPTURADAS].values[0])
+    actas_con = int(df1[ACTAS_CONTABILIZADAS].values[0])
+    actas_con_por = float(df1[PORCENTAJE_ACTAS_CONTABILIZADAS].values[0])
+    actas_incon_por = float(df1[PORCENTAJE_ACTAS_INCONSISTENCIAS].values[0])
+    actas_nocon = int(df1[ACTAS_NO_CONTABILIZADAS].values[0])
+    lnactascon = int(df1[LISTA_NOMINAL_ACTAS_CONTABILIZADAS].values[0])
+    totalvotosc = int(df1[TOTAL_VOTOS_C_CS].values[0])
+    totalvotoss = int(df1[TOTAL_VOTOS_S_CS].values[0])
+    participacionciu = float(df1[PORCENTAJE_PARTICIPACION_CIUDADANA].values[0])
 
 @allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
 @allure.story('Validación de Actas Registradas')  # Usa etiquetas estándar de Allure
@@ -148,11 +146,11 @@ def test_actas_registradas_coinciden():
     with allure.step("Comparando los valores de ACTAS_REGISTRADAS con los esperados"):
         if np.array_equal(value_counts3, actas_regis):
             allure.attach(
-                f"Los valores de ACTAS_REGISTRADAS coinciden: Conteo CSV: {value_counts3} Encabezado CSV: {actas_regis}",
+                f"Los valores de ACTAS_REGISTRADAS coinciden. Conteo CSV: {value_counts3} Encabezado CSV: {actas_regis}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
-            print(f'Los valores de ACTAS_REGISTRADAS coinciden: Conteo CSV: {value_counts3} Encabezado CSV: {actas_regis}')
+            print(f'Los valores de ACTAS_REGISTRADAS coinciden. Conteo CSV: {value_counts3} Encabezado CSV: {actas_regis}')
         else:
             allure.attach(
                 f"Los valores de ACTAS_REGISTRADAS no coinciden. Conteo CSV: {value_counts3} Encabezado CSV: {actas_regis}",
@@ -160,7 +158,6 @@ def test_actas_registradas_coinciden():
                 attachment_type=allure.attachment_type.TEXT
             )
             print(f"Los valores de ACTAS_REGISTRADAS no coinciden. Conteo CSV: {value_counts3} Encabezado CSV: {actas_regis}")
-            #print(f'')
         try:
             assert np.array_equal(value_counts3, actas_regis)
         except AssertionError:
@@ -176,16 +173,18 @@ def test_actas_fuera_catalogo_coinciden():
     with allure.step("Comparando los valores de ACTAS_FUERA_CATALOGO con los esperados"):
         if np.array_equal(value_counts1, actas_fuera):
             allure.attach(
-                f"Los valores de ACTAS_FUERA_CATALOGO coinciden: Conteo CSV: {value_counts1} Encabezado CSV: {actas_fuera}",
+                f"Los valores de ACTAS_FUERA_CATALOGO coinciden. Conteo CSV: {value_counts1} Encabezado CSV: {actas_fuera}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de ACTAS_FUERA_CATALOGO coinciden. Conteo CSV: {value_counts1} Encabezado CSV: {actas_fuera}')
         else:
             allure.attach(
                 f"Los valores de ACTAS_FUERA_CATALOGO no coinciden. Conteo CSV: {value_counts1} Encabezado CSV: {actas_fuera}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de ACTAS_FUERA_CATALOGO no coinciden. Conteo CSV: {value_counts1} Encabezado CSV: {actas_fuera}')
         try:
             assert np.array_equal(value_counts1, actas_fuera)
         except AssertionError:
@@ -201,16 +200,18 @@ def test_actas_capturadas_coinciden():
     with allure.step("Comparando los valores de ACTAS_CAPTURADAS con los esperados"):
         if np.array_equal(value_counts4, actas_cap):
             allure.attach(
-                f"4.- Los valores de ACTAS_CAPTURADAS coinciden: Conteo CSV: {value_counts4} Encabezado CSV: {actas_cap}",
+                f"Los valores de ACTAS_CAPTURADAS coinciden. Conteo CSV: {value_counts4} Encabezado CSV: {actas_cap}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de ACTAS_CAPTURADAS coinciden. Conteo CSV: {value_counts4} Encabezado CSV: {actas_cap}')
         else:
             allure.attach(
-                f"4.- Los valores de ACTAS_CAPTURADAS no coinciden. Conteo CSV: {value_counts4} Encabezado CSV: {actas_cap}",
+                f"Los valores de ACTAS_CAPTURADAS no coinciden. Conteo CSV: {value_counts4} Encabezado CSV: {actas_cap}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de ACTAS_CAPTURADAS no coinciden. Conteo CSV: {value_counts4} Encabezado CSV: {actas_cap}')
         try:
             assert np.array_equal(value_counts4, actas_cap)
         except AssertionError:
@@ -226,20 +227,22 @@ def test_actas_porcentaje_capturadas_coinciden():
     with allure.step("Comparando los valores de PORCENTAJE_ACTAS_CAPTURADAS con los esperados"):
         if np.array_equal(value_counts5, actas_cap_por):
             allure.attach(
-                f"Los valores de PORCENTAJE_ACTAS_CAPTURADAS coinciden: Conteo CSV: {value_counts5} Encabezado CSV: {actas_cap_por}",
+                f"Los valores de PORCENTAJE_ACTAS_CAPTURADAS coinciden. Conteo CSV: {value_counts5}% Encabezado CSV: {actas_cap_por}%",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de PORCENTAJE_ACTAS_CAPTURADAS coinciden. Conteo CSV: {value_counts5}% Encabezado CSV: {actas_cap_por}%')
         else:
             allure.attach(
-                f"Los valores de PORCENTAJE_ACTAS_CAPTURADAS no coinciden. Conteo CSV: {value_counts5} Encabezado CSV: {actas_cap_por}",
+                f"Los valores de PORCENTAJE_ACTAS_CAPTURADAS no coinciden. Conteo CSV: {value_counts5}% Encabezado CSV: {actas_cap_por}%",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de PORCENTAJE_ACTAS_CAPTURADAS no coinciden. Conteo CSV: {value_counts5}% Encabezado CSV: {actas_cap_por}%')
         try:
             assert np.array_equal(value_counts5, actas_cap_por)
         except AssertionError:
-            pytest.fail(f"Los valores no coinciden. Conteo CSV: {value_counts5} Encabezado CSV: {actas_cap_por}")
+            pytest.fail(f"Los valores no coinciden. Conteo CSV: {value_counts5}% Encabezado CSV: {actas_cap_por}%")
 
 @allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
 @allure.story('Validación de Actas Contabilizadas')  # Usa etiquetas estándar de Allure
@@ -251,16 +254,18 @@ def test_actas_contabilizadas_coinciden():
     with allure.step("Comparando los valores de ACTAS_CONTABILIZADAS con los esperados"):
         if np.array_equal(value_counts, actas_con):
             allure.attach(
-                f"Los valores de ACTAS_CONTABILIZADAS coinciden: {actas_con}",
+                f"Los valores de ACTAS_CONTABILIZADAS coinciden. Conteo CSV: {actas_con} Encabezado CSV: {value_counts}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de ACTAS_CONTABILIZADAS coinciden. Conteo CSV: {actas_con} Encabezado CSV: {value_counts}')
         else:
             allure.attach(
-                f"Los valores de ACTAS_CONTABILIZADAS no coinciden. {actas_con} vs {value_counts}",
+                f"Los valores de ACTAS_CONTABILIZADAS no coinciden. Conteo CSV: {actas_con} Encabezado CSV: {value_counts}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de ACTAS_CONTABILIZADAS no coinciden. Conteo CSV: {actas_con} Encabezado CSV: {value_counts}')
         try:
             assert np.array_equal(value_counts, actas_con)
         except AssertionError:
@@ -276,20 +281,22 @@ def test_actas_porcentaje_contabilizadas_coinciden():
     with allure.step("Comparando los valores de PORCENTAJE_ACTAS_CONTABILIZADAS con los esperados"):
         if np.array_equal(value_counts6, actas_con_por):
             allure.attach(
-                f"Los valores de PORCENTAJE_ACTAS_CONTABILIZADAS coinciden: Conteo CSV: {value_counts6} Encabezado CSV: {actas_con_por}",
+                f"Los valores de PORCENTAJE_ACTAS_CONTABILIZADAS coinciden: Conteo CSV: {value_counts6}% Encabezado CSV: {actas_con_por}%",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de PORCENTAJE_ACTAS_CONTABILIZADAS coinciden. Conteo CSV: {value_counts6}% Encabezado CSV: {actas_con_por}%')
         else:
             allure.attach(
-                f"Los valores de PORCENTAJE_ACTAS_CONTABILIZADAS no coinciden. Conteo CSV: {value_counts6} Encabezado CSV: {actas_con_por}",
+                f"Los valores de PORCENTAJE_ACTAS_CONTABILIZADAS no coinciden. Conteo CSV: {value_counts6}% Encabezado CSV: {actas_con_por}%",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de PORCENTAJE_ACTAS_CONTABILIZADAS no coinciden. Conteo CSV: {value_counts6}% Encabezado CSV: {actas_con_por}%')
         try:
             assert np.array_equal(value_counts6, actas_con_por)
         except AssertionError:
-            pytest.fail(f"Los valores no coinciden. Conteo CSV: {value_counts6} Encabezado CSV: {actas_con_por}")
+            pytest.fail(f"Los valores no coinciden. Conteo CSV: {value_counts6}% Encabezado CSV: {actas_con_por}%")
 
 @allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
 @allure.story('Validación de Porcentaje de Actas con Inconcistencias')  # Usa etiquetas estándar de Allure
@@ -301,20 +308,22 @@ def test_actas_porcentaje_inconsistencias_coinciden():
     with allure.step("Comparando los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS con los esperados"):
         if np.array_equal(value_counts7, actas_incon_por):
             allure.attach(
-                f"Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS coinciden: Conteo CSV: {value_counts7} Encabezado CSV: {actas_incon_por}",
+                f"Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS coinciden. Conteo CSV: {value_counts7}% Encabezado CSV: {actas_incon_por}%",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS coinciden. Conteo CSV: {value_counts7}% Encabezado CSV: {actas_incon_por}%')
         else:
             allure.attach(
-                f"Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS no coinciden. Conteo CSV: {value_counts7} Encabezado CSV: {actas_incon_por}",
+                f"Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS no coinciden. Conteo CSV: {value_counts7}% Encabezado CSV: {actas_incon_por}%",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS no coinciden. Conteo CSV: {value_counts7}% Encabezado CSV: {actas_incon_por}%')
         try:
             assert np.array_equal(value_counts7, actas_incon_por)
         except AssertionError:
-            pytest.fail(f"Los valores no coinciden. Conteo CSV: {value_counts7} Encabezado CSV: {actas_incon_por}")
+            pytest.fail(f"Los valores no coinciden. Conteo CSV: {value_counts7}% Encabezado CSV: {actas_incon_por}%")
 
 @allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
 @allure.story('Validación de Actas No Contabilizadas')  # Usa etiquetas estándar de Allure
@@ -326,16 +335,18 @@ def test_actas_no_contabilizadas_coinciden():
     with allure.step("Comparando los valores de ACTAS_NO_CONTABILIZADAS con los esperados"):
         if np.array_equal(value_counts2, actas_nocon):
             allure.attach(
-                f"Los valores de ACTAS_NO_CONTABILIZADAS coinciden: Conteo CSV: {value_counts2} Encabezado CSV: {actas_nocon}",
+                f"Los valores de ACTAS_NO_CONTABILIZADAS coinciden. Conteo CSV: {value_counts2} Encabezado CSV: {actas_nocon}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de ACTAS_NO_CONTABILIZADAS coinciden. Conteo CSV: {value_counts2} Encabezado CSV: {actas_nocon}')
         else:
             allure.attach(
                 f"Los valores de ACTAS_NO_CONTABILIZADAS no coinciden. Conteo CSV: {value_counts2} Encabezado CSV: {actas_nocon}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de ACTAS_NO_CONTABILIZADAS no coinciden. Conteo CSV: {value_counts2} Encabezado CSV: {actas_nocon}')
         try:
             assert np.array_equal(value_counts2, actas_nocon)
         except AssertionError:
@@ -351,16 +362,18 @@ def test_lista_nominal_actas_contabilizadas_coinciden():
     with allure.step("Comparando los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS con los esperados"):
         if np.array_equal(value_counts8, lnactascon):
             allure.attach(
-                f"Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS coinciden: Conteo CSV: {value_counts8} Encabezado CSV: {lnactascon}",
+                f"Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS coinciden. Conteo CSV: {value_counts8} Encabezado CSV: {lnactascon}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS coinciden. Conteo CSV: {value_counts8} Encabezado CSV: {lnactascon}')
         else:
             allure.attach(
                 f"Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS no coinciden. Conteo CSV: {value_counts8} Encabezado CSV: {lnactascon}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS no coinciden. Conteo CSV: {value_counts8} Encabezado CSV: {lnactascon}')
         try:
             assert np.array_equal(value_counts8, lnactascon)
         except AssertionError:
@@ -376,16 +389,18 @@ def test_total_votos_c_cs_coinciden():
     with allure.step("Comparando los valores de TOTAL_VOTOS_C_CS con los esperados"):
         if np.array_equal(value_counts10, totalvotosc):
             allure.attach(
-                f"Los valores de TOTAL_VOTOS_C_CS coinciden: Conteo CSV: {value_counts10} Encabezado CSV: {totalvotosc}",
+                f"Los valores de TOTAL_VOTOS_C_CS coinciden. Conteo CSV: {value_counts10} Encabezado CSV: {totalvotosc}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de TOTAL_VOTOS_C_CS coinciden. Conteo CSV: {value_counts10} Encabezado CSV: {totalvotosc}')
         else:
             allure.attach(
                 f"Los valores de TOTAL_VOTOS_C_CS no coinciden. Conteo CSV: {value_counts10} Encabezado CSV: {totalvotosc}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de TOTAL_VOTOS_C_CS no coinciden. Conteo CSV: {value_counts10} Encabezado CSV: {totalvotosc}')
         try:
             assert np.array_equal(value_counts10, totalvotosc)
         except AssertionError:
@@ -401,16 +416,18 @@ def test_total_votos_s_cs_coinciden():
     with allure.step("Comparando los valores de TOTAL_VOTOS_S_CS con los esperados"):
         if np.array_equal(value_counts11, totalvotoss):
             allure.attach(
-                f"Los valores de TOTAL_VOTOS_S_CS coinciden: Conteo CSV: {value_counts11} Encabezado CSV: {totalvotoss}",
+                f"Los valores de TOTAL_VOTOS_S_CS coinciden. Conteo CSV: {value_counts11} Encabezado CSV: {totalvotoss}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de TOTAL_VOTOS_S_CS coinciden. Conteo CSV: {value_counts11} Encabezado CSV: {totalvotoss}')
         else:
             allure.attach(
                 f"Los valores de TOTAL_VOTOS_S_CS no coinciden. Conteo CSV: {value_counts11} Encabezado CSV: {totalvotoss}",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de TOTAL_VOTOS_S_CS no coinciden. Conteo CSV: {value_counts11} Encabezado CSV: {totalvotoss}')
         try:
             assert np.array_equal(value_counts11, totalvotoss)
         except AssertionError:
@@ -426,17 +443,19 @@ def test_porcentaje_participacion_ciudadana_coinciden():
     with allure.step("Comparando los valores de PORCENTAJE_PARTICIPACION_CIUDADANA con los esperados"):
         if np.array_equal(value_counts9, participacionciu):
             allure.attach(
-                f"13.- Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA coinciden: Conteo CSV: {value_counts9} Encabezado CSV: {participacionciu}",
+                f"Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA coinciden. Conteo CSV: {value_counts9}% Encabezado CSV: {participacionciu}%",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA coinciden. Conteo CSV: {value_counts9}% Encabezado CSV: {participacionciu}%')
         else:
             allure.attach(
-                f"13.- Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA no coinciden. Conteo CSV: {value_counts9} Encabezado CSV: {participacionciu}",
+                f"Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA no coinciden. Conteo CSV: {value_counts9}% Encabezado CSV: {participacionciu}%",
                 name="Resultado de la validación",
                 attachment_type=allure.attachment_type.TEXT
             )
+            print(f'Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA no coinciden. Conteo CSV: {value_counts9}% Encabezado CSV: {participacionciu}%')
         try:
             assert np.array_equal(value_counts9, participacionciu)
         except AssertionError:
-            pytest.fail(f"Los valores no coinciden. Conteo CSV: {value_counts9} Encabezado CSV: {participacionciu}")
+            pytest.fail(f"Los valores no coinciden. Conteo CSV: {value_counts9}% Encabezado CSV: {participacionciu}%")
