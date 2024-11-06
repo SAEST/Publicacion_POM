@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 def enviar_correo():
     # Configuración del servidor SMTP de Gmail
     smtp_host = "smtp.gmail.com"
-    smtp_port = 465
+    smtp_port = 587
     smtp_user = "dpit.saest.dest@gmail.com"  # Reemplaza con tu email
     smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
 
@@ -45,7 +45,7 @@ def enviar_correo():
     blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{build_name}/detail/{build_name}/{build_number}/pipeline"
  
     # Configuración del mensaje
-    destinatarios = ["eric.ruiz@ine.mx", "georgina.cuadriello@ine.mx", "angelita.cruz@ine.mx"]
+    destinatarios = ["eric.ruiz@ine.mx"] #, "georgina.cuadriello@ine.mx", "angelita.cruz@ine.mx"]
     subject = f"[DEST][Jenkins] Resultado de ejecución de Pipeline: {build_name} Número: {build_number}"
      
     body = f"""
