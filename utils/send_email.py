@@ -45,12 +45,12 @@ def enviar_correo():
     blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{build_name}/detail/{build_name}/{build_number}/pipeline"
  
     # Configuración del mensaje
-    destinatarios = ["eric.ruiz@ine.mx", "georgina.cuadriello@ine.mx"]
+    destinatarios = ["eric.ruiz@ine.mx", "georgina.cuadriello@ine.mx", "angelita.cruz@ine.mx"]
     subject = f"[DEST][Jenkins] Resultado de ejecución de Pipeline: {build_name} Número: {build_number}"
      
     body = f"""
         <h2 style="color: #2E86C1;">Reporte de Ejecución del Pipeline</h2>
-        <p>Estimado equipo:</p>
+        <p>Estimado equipo.</p>
         <p>El pipeline <strong>{build_name}</strong> ha finalizado. Aquí está el resumen:</p>
         <table style="width: 50%; border: 1px solid #ddd; border-collapse: collapse;">
             <tr>
@@ -83,6 +83,7 @@ def enviar_correo():
             </tr>
         </table>
         <p>Revisa más detalles:</p>
+        <p>Usuario: invitado Contraseña: DEST-QA</p>
         <a href="{allure_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5cb85c; text-decoration: none;">Reporte Allure</a>
         <a href="{pytest_report_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5cb85c; text-decoration: none;">Reporte Pytest</a><br><br>
         <a href="{blue_ocean_url}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #5bc0de; text-decoration: none;">Pipeline Blue Ocean</a>
