@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 def enviar_correo():
     # Configuración del servidor SMTP de Gmail
     smtp_host = "smtp.gmail.com"
-    smtp_port = 587
+    smtp_port = 465
     smtp_user = "dpit.saest.dest@gmail.com"  # Reemplaza con tu email
     smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
 

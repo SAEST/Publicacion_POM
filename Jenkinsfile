@@ -26,7 +26,7 @@ pipeline {
             steps {
                 // Activar el entorno virtual e instalar las dependencias
                 sh """
-                    . ${VENV_DIR}/bin/activate
+                    . ${VENV_DIR}/bin/activate >  /dev/null 2>&1
                     pip install --no-cache-dir -r requirements.txt
                 """
             }
@@ -89,7 +89,7 @@ pipeline {
                 archiveArtifacts artifacts: 'data/bd/pres-csv/PRES_2024.csv', allowEmptyArchive: true
 
                 sh """
-                    . ${VENV_DIR}/bin/activate
+                    . ${VENV_DIR}/bin/activate > /dev/null 2>&1
                     python3 utils/send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}
                 """
             }
