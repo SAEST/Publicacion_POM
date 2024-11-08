@@ -10,7 +10,8 @@ def enviar_correo():
     smtp_host = "smtp.gmail.com"
     smtp_port = 465
     smtp_user = "dpit.saest.dest@gmail.com"  # Reemplaza con tu email
-    smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
+    #smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
+    smtp_password = os.getenv('SMTP_PASSWORD')
 
     # Abre el archivo HTML y extrae la información necesaria
     with open('./reports/pytestreport/report.html', 'r') as f: 
