@@ -90,8 +90,10 @@ pipeline {
 
                 withCredentials([string(credentialsId: 'SMTP_PASSWORD', variable: 'SMTP_PASSWORD')]) {
                     sh(
-                        script: '. ${VENV_DIR}/bin/activate > /dev/null 2>&1
-                        python3 utils/send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION} --password="$SMTP_PASSWORD"',
+                        script: '''
+                            . ${VENV_DIR}/bin/activate > /dev/null 2>&1
+                            python3 utils/send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION} --password="$SMTP_PASSWORD"
+                        ''',
                         environment: [
                             SMTP_PASSWORD: "${SMTP_PASSWORD}"
                         ]
