@@ -87,13 +87,11 @@ pipeline {
                 // Archiva los reportes de Pytest y datos adicionales
                 archiveArtifacts artifacts: 'reports/pytestreport/report.html', allowEmptyArchive: true
                 archiveArtifacts artifacts: 'data/bd/pres-csv/PRES_2024.csv', allowEmptyArchive: true
-
-                withCredentials([string(credentialsId: 'SMTP_PASSWORD', variable: 'SMTP_PASSWORD')]) {
-
-                    sh """
-                        . ${VENV_DIR}/bin/activate > /dev/null 2>&1
-                        python3 utils/send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION} ${env.SMTP_PASSWORD}
-                    """
+              
+                sh """
+                    . ${VENV_DIR}/bin/activate > /dev/null 2>&1
+                    python3 utils/send_email.py ${env.BUILD_RESULT} ${env.BUILD_DURATION}
+                """
                 }
             }
         }
