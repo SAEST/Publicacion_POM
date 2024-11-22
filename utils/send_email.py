@@ -7,11 +7,9 @@ from bs4 import BeautifulSoup
 
 def enviar_correo():
     # Configuración del servidor SMTP de Gmail
-    smtp_host = "smtp.gmail.com"
-    smtp_port = 465
-    smtp_user = "dpit.saest.dest@gmail.com"  # Reemplaza con tu email
-    #smtp_password = "yzjn gphd stcw staq"  # Contraseña de aplicación de Google
-    smtp_password = os.getenv('SMTP_PASSWORD')
+    smtp_host = "gw-correo.ife.org.mx"
+    smtp_port = 25
+    remitente = "pruebas.dest@ine.mx"
 
     # Abre el archivo HTML y extrae la información necesaria
     with open('./reports/pytestreport/report.html', 'r') as f: 
@@ -46,7 +44,7 @@ def enviar_correo():
     blue_ocean_url = f"{os.getenv('JENKINS_URL')}blue/organizations/jenkins/{build_name}/detail/{build_name}/{build_number}/pipeline"
  
     # Configuración del mensaje
-    destinatarios = ["eric.ruiz@ine.mx"] #, "georgina.cuadriello@ine.mx", "angelita.cruz@ine.mx"]
+    destinatarios = ["eric.ruiz@ine.mx", "georgina.cuadriello@ine.mx", "angelita.cruz@ine.mx"]
     subject = f"[DEST][Jenkins] Resultado de ejecución de Pipeline: {build_name} Número: {build_number}"
      
     body = f"""
@@ -94,16 +92,16 @@ def enviar_correo():
 
     # Crear el mensaje MIME
     mensaje = MIMEMultipart()
-    mensaje['From'] = smtp_user
+    mensaje['From'] = remitente
     mensaje['To'] = ", ".join(destinatarios)
     mensaje['Subject'] = subject
     mensaje.attach(MIMEText(body, 'html'))
 
     # Conectar al servidor y enviar el correo
     try:
-        with smtplib.SMTP_SSL(smtp_host, smtp_port) as server:
-            server.login(smtp_user, smtp_password)
-            server.sendmail(smtp_user, destinatarios, mensaje.as_string())
+        with smtplib.SMTP(smtp_host, smtp_port) as server:
+            server.set_debuglevel(True)
+            server.sendmail(remitente, destinatarios, mensaje.as_string())
             print("Correo enviado con éxito")
             print(f"Destinatarios: {destinatarios}")
     except Exception as e:
