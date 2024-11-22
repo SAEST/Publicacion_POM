@@ -6,8 +6,8 @@ pipeline {
         JAVA_OPTS = "-Dhudson.model.DirectoryBrowserSupport.CSP=\"sandbox allow-scripts allow-same-origin; default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval';\""
         // Establece las variables de allure
         APP_VERSION = '1.0.0'
-        PLATFORM = 'Ubuntu-Windows 2404.1.66.0'
-        BROWSER = 'Chromedriver: 130.0.6723.69'
+        PLATFORM = 'Fedora Linux 41 (Server Edition)'
+        BROWSER = 'Chromedriver: 128.0.6613.84'
     }
     stages {
         stage('Clean Up and Checkout ') {
