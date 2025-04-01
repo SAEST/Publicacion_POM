@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 def enviar_correo():
     # Configuración del servidor SMTP de Gmail
-    smtp_host = "gw-correo.ife.org.mx"
+    smtp_host = "correo.ine.mx"
     smtp_port = 25
     remitente = "pruebas.dest@ine.mx"
 
